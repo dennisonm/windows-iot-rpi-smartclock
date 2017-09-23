@@ -1,0 +1,1 @@
+H:\Dropbox\Projects\IoT\Windows IoT - Clock\SmartClockR800x480\SmartClockR800x480.csproj;x64
