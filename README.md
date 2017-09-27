@@ -4,8 +4,8 @@
 - Myron Richard Dennison ([dennisonmra@gmail.com](mailto:dennisonmra@gmail))
 
 ## Hardware
-	- RPI 3
-	- 7" touchscreen display
+	- RPI 2 or 3
+	- 7" display
 	- small speaker with aux input
 	
 ## License
