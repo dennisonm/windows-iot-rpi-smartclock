@@ -4,7 +4,9 @@
 - Myron Richard Dennison ([dennisonmra@gmail.com](mailto:dennisonmra@gmail))
 
 ## Hardware
-	TBA
+	- RPI 3
+	- 7" touchscreen display
+	- small speaker with aux input
 	
 ## License
 
