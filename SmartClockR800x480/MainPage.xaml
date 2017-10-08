@@ -18,13 +18,36 @@
         <!-- Header -->
         <Border Grid.Row="0" Background="#D000" Height="60">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
                 <TextBlock x:Name="pageTitle" 
+                           Grid.Column="1"
                            Margin="0,0,0,0" 
                            FontSize="30" 
                            HorizontalAlignment="Center" 
                            Foreground="#EEEADCDC">
-                    Pro|ject Liːəʊ: ðə Smɑːt Klɒk Prototype V1.0
+                    Pro|ject Liːəʊ: ðə Smɑːt Klɒk
                 </TextBlock>
+                <Button Name="PowerBtn" 
+                            Content="" 
+                            Grid.Column="2"
+                            Margin="0,0,10,0" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Center"                     
+                            Width="40" Height="40">
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Restart" Click="Restart_Click"/>
+                            <MenuFlyoutItem Text="Shutdown" Click="Shutdown_Click"/>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="Assets/powerbutton.png"/>
+                    </Button.Background>
+                </Button>
             </Grid>
         </Border>
 
@@ -40,9 +63,9 @@
                 </TextBlock>
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="75" />
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="75" />
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100" />
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="Lbl_Time" 
                                Grid.Column="1"
@@ -79,8 +102,7 @@
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <TextBlock x:Name="SystemStatusTb" 
@@ -92,20 +114,14 @@
                        Margin="10,10,10,10">
                 System Status:
             </TextBlock>
-            <Button Name="SettingsBtn" 
-                    Content="" 
-                    Margin="10,10,10,10" 
-                    Click="SettingsBtn_Click"
-                    Grid.Column="2"
-                    Height="40" Width="40"
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Bottom"                     
-                    VerticalContentAlignment="Bottom" 
-                    HorizontalContentAlignment="Right" Style="{StaticResource ButtonStyleForSIAPS}">
-                <Button.Background>
-                    <ImageBrush ImageSource="Assets/Settings-icon.png"/>
-                </Button.Background>
-            </Button>
+            <TextBlock Grid.Column="1" 
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center" 
+                       FontSize="15" 
+                       Foreground="#EEEADCDC" 
+                       Margin="10,10,10,10">
+                © 2017 Myron Richard Dennison
+            </TextBlock>
         </Grid>
     </Grid>
 </Page>
