@@ -38,7 +38,7 @@ namespace SmartClock
                 this.Lbl_Location.Text = GetLocationByIPAddress();
 
             // Initialize Status TextBlock
-            this.SystemStatusTb.Text = "System Status: It's all good :)";
+            this.SystemStatusTb.Text = "";
         }        
 
         /// <summary>
@@ -75,12 +75,6 @@ namespace SmartClock
             // Send the stream to the media object
             mediaElement.SetSource(stream, stream.ContentType);
 
-            // Play media
-            //mediaElement.Play();
-
-            // Stops and resets media 
-            //mediaElement.Stop();  
-
             // Disposes the SpeechSynthesizer object and releases resources used 
             synth.Dispose();
         }
@@ -90,19 +84,8 @@ namespace SmartClock
         /// </summary>
         private void DispatcherClockTimer_Tick(object sender, object e)
         {
-            if (!Global.pageWasReloaded)
-            {                
-                //Global.twelveHrBtnPreviousState = (TwelveHrBtn.IsChecked == true) ? true : false;
-                //Global.twentyFourHrBtnPreviousState = (TwentyFourHrBtn.IsChecked == true) ? true : false;
-            }
-            else
-            {
-                TwentyFourHrBtn.IsChecked = Global.twentyFourHrBtnPreviousState;
-                TwelveHrBtn.IsChecked = Global.twelveHrBtnPreviousState;
-            }
-
-            this.Lbl_Time.Text = (TwelveHrBtn.IsChecked == true) ? DateTime.Now.ToString("hh:mm tt") : DateTime.Now.ToString("HH:mm ddd");
-            this.Lbl_Date.Text = (TwelveHrBtn.IsChecked == true) ? DateTime.Now.ToString("dddd, MMMM dd, yyyy") : DateTime.Now.ToString("MMMM dd, yyyy");
+            this.Lbl_Time.Text = DateTime.Now.ToString("hh:mm:ss tt");
+            this.Lbl_Date.Text =DateTime.Now.ToString("dddd, MMMM dd, yyyy");
 
             if (DateTime.Now.Minute == 0 && Global.broadcasted == false && DateTime.Now.Hour > 5)
             {
@@ -176,35 +159,10 @@ namespace SmartClock
                 this.SystemStatusTb.Text = "Exception: Get Location By IP Address Error!";
             }            
             return location.Trim();
-        }   
-
-        private async void TwelveHrBtn_Checked(object sender, RoutedEventArgs e)
-        {
-            if(Global.twelveHrBtnPreviousState == false)
-                Speak("Changing time keeping convention to 12-hour clock.");
-            Global.twelveHrBtnPreviousState = true;
-            Global.twentyFourHrBtnPreviousState = false;
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                this.Lbl_Time.Text = DateTime.Now.ToString("hh:mm tt"); // 12hr format
-            });
-            
-        }
-
-        private async void TwentyFourHrBtn_Checked(object sender, RoutedEventArgs e)
-        {
-            if(Global.twentyFourHrBtnPreviousState == false)
-                Speak("Changing time keeping convention to 24-hour clock.");
-            Global.twentyFourHrBtnPreviousState = true;
-            Global.twelveHrBtnPreviousState = false;
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                this.Lbl_Time.Text = DateTime.Now.ToString("HH:mm ddd"); // 24hr format
-            }); 
-        }
+        } 
 
         /// <summary>
-        /// 
+        /// Shuts down, then restarts the device
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -215,7 +173,7 @@ namespace SmartClock
         }
 
         /// <summary>
-        /// 
+        /// Shuts down the device without restarting it
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

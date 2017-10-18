@@ -59,34 +59,16 @@
                            FontSize="40" 
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Center">
-                    April 07, 2005
+                    Thursday, April 07, 2005
                 </TextBlock>
-                <Grid VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50" />
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="100" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="Lbl_Time" 
-                               Grid.Column="1"
+                <Grid VerticalAlignment="Center">                    
+                    <TextBlock x:Name="Lbl_Time"                               
                                Foreground="#EEEADCDC" 
-                               FontSize="145"
+                               FontSize="140"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center">
-                            01:27 AM
-                    </TextBlock>
-                    <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,15,0,0">
-                        <RadioButton x:Name="TwelveHrBtn" 
-                                     Content="12-HR" 
-                                     Checked="TwelveHrBtn_Checked" 
-                                     VerticalContentAlignment="Top" 
-                                     VerticalAlignment="Bottom"/>
-                        <RadioButton x:Name="TwentyFourHrBtn" 
-                                     Content="24-HR" 
-                                     Checked="TwentyFourHrBtn_Checked" 
-                                     VerticalContentAlignment="Top" 
-                                     VerticalAlignment="Bottom"/>
-                    </StackPanel>
+                            01:27:00 AM
+                    </TextBlock>                    
                 </Grid>
                 <TextBlock x:Name="Lbl_Location" 
                         Foreground="#EE35EA0D" 
