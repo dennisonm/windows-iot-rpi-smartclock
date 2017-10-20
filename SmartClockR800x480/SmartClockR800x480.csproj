@@ -97,7 +97,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Global.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -110,10 +109,12 @@
     <None Include="SmartClock_Key.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Home-icon.png" />
+    <Content Include="Assets\AU-Flag.png" />
+    <Content Include="Assets\Home-Icon.png" />
+    <Content Include="Assets\PH-Flag.png" />
     <Content Include="Assets\powerbutton.png" />
-    <Content Include="Assets\Sensor-icon.png" />
-    <Content Include="Assets\Settings-icon.png" />
+    <Content Include="Assets\Settings-Icon.png" />
+    <Content Include="Assets\SG-Flag.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -162,8 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
-    <Folder Include="Grammar\" />
-    <Folder Include="Themes\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

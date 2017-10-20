@@ -7,13 +7,19 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Media.SpeechSynthesis;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace SmartClock
 {
     public sealed partial class MainPage : Page
     {
-        // Dispatcher timer for the clock 
         private DispatcherTimer DispatcherClockTimer = new DispatcherTimer();
+        private static bool broadcasted = false;
+        TimeZoneInfo remoteTimeZone;        
+            
+        BitmapImage AuFlag = new BitmapImage(new Uri("ms-appx:///Assets/AU-Flag.png"));
+        BitmapImage SgFlag = new BitmapImage(new Uri("ms-appx:///Assets/SG-Flag.png"));
+        BitmapImage PhFlag = new BitmapImage(new Uri("ms-appx:///Assets/PH-Flag.png"));        
 
         public MainPage()
         {
@@ -27,15 +33,43 @@ namespace SmartClock
             // Update Location TextBlock                       
             if (GetLocationByIPAddress() == null || GetLocationByIPAddress() == "")
             {
-                this.SystemStatusTb.Text = "System Status: Error getting location by IP Address!";
-                this.Lbl_Location.Text = "Singapore, Singapore";
+                this.SystemStatusTb.Text = "Unable to get location by IP Address!";
+                this.LocalLocationLbl.Text = "Singapore, Singapore";
                 Speak(
                     "I am having problem getting your location." +
                     " " +
                     "Please check your network.");
             }
             else
-                this.Lbl_Location.Text = GetLocationByIPAddress();
+                this.LocalLocationLbl.Text = GetLocationByIPAddress();
+
+            if (GetLocationByIPAddress().Contains("Singapore"))
+            {
+                LocalFlag.Source = SgFlag;
+                remoteTimeZone = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
+                RemoteFlag.Source = AuFlag;
+                Greetings.Text = "Alla mak! Late orready lah!";                
+            }
+            else if (GetLocationByIPAddress().Contains("Australia"))
+            {
+                LocalFlag.Source = AuFlag;
+                remoteTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
+                RemoteFlag.Source = PhFlag;
+                Greetings.Text = "Ga day! Ow ya goin'";                
+            }
+            else if (GetLocationByIPAddress().Contains("Philippines"))
+            {
+                LocalFlag.Source = PhFlag;
+                remoteTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
+                RemoteFlag.Source = AuFlag;
+                Greetings.Text = "Mabuhay!";                
+            }
+            else //default
+            {
+                LocalFlag.Source = PhFlag;
+                remoteTimeZone = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
+                RemoteFlag.Source = AuFlag;
+            }
 
             // Initialize Status TextBlock
             this.SystemStatusTb.Text = "";
@@ -47,9 +81,6 @@ namespace SmartClock
         /// </summary>
         private async void Speak(string text)
         {
-            // Dispose SpeechRecognizer 
-            //await DisposeSpeechRecognizer();            
-
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {                
                 _Speak(text);                
@@ -84,20 +115,26 @@ namespace SmartClock
         /// </summary>
         private void DispatcherClockTimer_Tick(object sender, object e)
         {
-            this.Lbl_Time.Text = DateTime.Now.ToString("hh:mm:ss tt");
-            this.Lbl_Date.Text =DateTime.Now.ToString("dddd, MMMM dd, yyyy");
+            this.LocalTimeLbl.Text = DateTime.Now.ToString("h:mm");
+            this.LocalDateLbl.Text =DateTime.Now.ToString("dddd, MMMM dd, yyyy");
+            this.LocalTimeSecLbl.Text = DateTime.Now.ToString("ss");
+            this.LocalTimeAMPMLbl.Text = (DateTime.Now.Hour >= 12) ? "PM" : "AM";
 
-            if (DateTime.Now.Minute == 0 && Global.broadcasted == false && DateTime.Now.Hour > 5)
+            if (DateTime.Now.Minute == 0 && broadcasted == false && DateTime.Now.Hour > 5)
             {
                 if (DateTime.Now.Hour <= 12)
                     Speak("It's " + DateTime.Now.Hour + " o'clock!");
                 else
                     Speak("It's " + (DateTime.Now.Hour - 12) + " o'clock!");
-                Global.broadcasted = true;
+                broadcasted = true;
             }
+            
+            DateTime remoteTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, remoteTimeZone);
+            this.RemoteTimeLbl.Text = Convert.ToString(remoteTime.ToString("h:mm"));
+            this.RemoteDateLbl.Text = Convert.ToString(remoteTime.ToString("ddd, MMM dd"));
 
             if (DateTime.Now.Minute == 1)
-                Global.broadcasted = false;
+                broadcasted = false;
         }
 
         /// <summary>

@@ -8,95 +8,131 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Width="800" Height="480">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>            
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="330"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Grid.Row="0" Background="#D000" Height="60">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock x:Name="pageTitle" 
-                           Grid.Column="1"
-                           Margin="0,0,0,0" 
-                           FontSize="30" 
-                           HorizontalAlignment="Center" 
-                           Foreground="#EEEADCDC">
-                    Pro|ject Liːəʊ: ðə Smɑːt Klɒk
+        <Grid Grid.Row="0">            
+            <TextBlock x:Name="Greetings" 
+                Foreground="#EEEADCDC" 
+                FontSize="50"
+                Margin="0,10,0,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" FontStyle="Italic">                        
+                Alla mak! Late orready lah! 
+            </TextBlock>
+        </Grid>
+        <!-- Local Date -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock x:Name="RemoteDateLbl" 
+                        Foreground="#EE35EA0D" 
+                        FontSize="20"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center">
+                    Sat, Jan 27
                 </TextBlock>
-                <Button Name="PowerBtn" 
-                            Content="" 
-                            Grid.Column="2"
-                            Margin="0,0,10,0" 
-                            HorizontalAlignment="Right" 
-                            VerticalAlignment="Center"                     
-                            Width="40" Height="40">
-                    <Button.Flyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem Text="Restart" Click="Restart_Click"/>
-                            <MenuFlyoutItem Text="Shutdown" Click="Shutdown_Click"/>
-                        </MenuFlyout>
-                    </Button.Flyout>
-                    <Button.Background>
-                        <ImageBrush Stretch="Fill" ImageSource="Assets/powerbutton.png"/>
-                    </Button.Background>
-                </Button>
-            </Grid>
-        </Border>
-
-        <!-- Date Time -->
-        <Grid Grid.Row="2">
-            <StackPanel>
-                <TextBlock x:Name="Lbl_Date" 
-                           Foreground="#EE35EA0D" 
-                           FontSize="40" 
-                           VerticalAlignment="Bottom"
-                           HorizontalAlignment="Center">
-                    Thursday, April 07, 2005
-                </TextBlock>
-                <Grid VerticalAlignment="Center">                    
-                    <TextBlock x:Name="Lbl_Time"                               
-                               Foreground="#EEEADCDC" 
-                               FontSize="140"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center">
-                            01:27:00 AM
-                    </TextBlock>                    
-                </Grid>
-                <TextBlock x:Name="Lbl_Location" 
+                <TextBlock x:Name="RemoteTimeLbl" 
+                        Grid.Column="1"
+                        Foreground="#EEEADCDC" 
+                        FontSize="50"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                    02:17
+                </TextBlock>                
+                <Image x:Name="RemoteFlag"                             
+                        Grid.Column="0"
+                        Margin="10,0,0,0"                              
+                        Width="75" 
+                        HorizontalAlignment="Center"     
+                        Source="Assets/PH-Flag.png"/>
+            </StackPanel>
+            <Grid Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock x:Name="LocalDateLbl" 
                         Foreground="#EE35EA0D" 
                         FontSize="40" 
                         VerticalAlignment="Top"
                         HorizontalAlignment="Center">
+                    Thursday, April 07, 2005
+                </TextBlock>
+                <TextBlock x:Name="LocalTimeLbl" 
+                        Grid.Column="1"
+                        Foreground="#EEEADCDC" 
+                        FontSize="210"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                    01:27
+                </TextBlock>
+                <TextBlock x:Name="LocalLocationLbl" 
+                        Foreground="#EE35EA0D" 
+                        FontSize="40" 
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center">
                     Singapore, Singapore
                 </TextBlock>
+            </Grid>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Image x:Name="LocalFlag"                             
+                        Grid.Column="0"                                                    
+                        HorizontalAlignment="Center"                                                
+                        Width="75" 
+                        Source="Assets/SG-Flag.png"/>
+                <TextBlock x:Name="LocalTimeAMPMLbl" 
+                        Grid.Column="2"
+                        Foreground="#EEEADCDC" 
+                        FontSize="50"
+                        VerticalAlignment="Center">
+                    AM
+                </TextBlock>
+                <TextBlock x:Name="LocalTimeSecLbl" 
+                        Grid.Column="2"                        
+                        Foreground="#EEEADCDC" 
+                        FontSize="70">
+                    29
+                </TextBlock>
             </StackPanel>
-        </Grid>        
+        </Grid>
 
         <!-- Footer -->
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-
+            <Button Name="PowerBtn"                 
+                Grid.Column="0"
+                Margin="10,10,0,10" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Center"                     
+                Width="40" Height="40">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Restart" Click="Restart_Click"/>
+                        <MenuFlyoutItem Text="Shutdown" Click="Shutdown_Click"/>
+                    </MenuFlyout>
+                </Button.Flyout>
+                <Button.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="Assets/powerbutton.png"/>
+                </Button.Background>
+            </Button>
             <TextBlock x:Name="SystemStatusTb" 
-                       Grid.Column="0" 
+                       Grid.Column="1" 
                        HorizontalAlignment="Left" 
-                       VerticalAlignment="Bottom" 
+                       VerticalAlignment="Center" 
                        FontSize="15" 
                        Foreground="#EEEADCDC" 
                        Margin="10,10,10,10">
-                System Status:
+                Initializing...
             </TextBlock>
-            <TextBlock Grid.Column="1" 
+            <TextBlock Grid.Column="2" 
                        HorizontalAlignment="Right" 
                        VerticalAlignment="Center" 
                        FontSize="15" 
