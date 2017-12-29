@@ -107,7 +107,7 @@
             </TextBlock>
             <Image x:Name="weatherIcon"                             
                         Grid.Column="2"
-                        Margin="10,8,0,0"                              
+                        Margin="10,3,0,0"                              
                         Width="auto"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left"     
@@ -145,7 +145,7 @@
                         <MenuFlyoutSubItem Text="Debug">
                             <MenuFlyoutItem Text="My Private IP Address" Click="GetMyLocalIP_Click"/>
                             <MenuFlyoutItem Text="What time is it?" Click="testTimeTTS_Click"/>
-                            <MenuFlyoutItem Text="What's the temperature outside?" Click="testWeatherTTS_Click"/>
+                            <MenuFlyoutItem Text="What's the weather?" Click="testWeatherTTS_Click"/>
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem Text="About SAP" Click="About_Click"/>
@@ -178,7 +178,7 @@
                        FontSize="15" 
                        Foreground="#EEEADCDC" 
                        Margin="10,10,10,10">
-                <Run Text="© 2017 Myron Richard Dennison"/>
+                <Run Text="© 2018 Myron Richard Dennison"/>
             </TextBlock>
         </Grid>
     </Grid>

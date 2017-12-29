@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.Media.SpeechSynthesis;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Popups;
+using Windows.Media.SpeechSynthesis;
 using Windows.Networking;
 using Windows.Networking.Connectivity;
-using System.Reflection;
-using Windows.UI.Popups;
-using Windows.UI;
+
 
 namespace SmartClock
 {
@@ -25,6 +26,7 @@ namespace SmartClock
         double lat = -33.812023;
         double lon = 151.173050;
         int outsideTemp;
+        string weatherDescription;
 
         BitmapImage thumbsUp = new BitmapImage(new Uri("ms-appx:///Assets/ThumbsUp-Icon.png"));
         BitmapImage thumbsDown = new BitmapImage(new Uri("ms-appx:///Assets/ThumbsDown-Icon.png"));
@@ -92,21 +94,29 @@ namespace SmartClock
             this.LocalTimeSecLbl.Text = DateTime.Now.ToString("ss");
             this.LocalTimeAMPMLbl.Text = (DateTime.Now.Hour >= 12) ? "PM" : "AM";
 
-            if (DateTime.Now.Minute == 0 && broadcasted == false)
+            if (DateTime.Now.Minute == 0)
             {
-                if (DateTime.Now.Hour > 5)
+                if (DateTime.Now.Hour > 5 && broadcasted == false)
                 {
                     if (DateTime.Now.Hour <= 12)
                         Speak("It's " + DateTime.Now.Hour + " o'clock!");
                     else
                         Speak("It's " + (DateTime.Now.Hour - 12) + " o'clock!");
                     broadcasted = true;
-                }                
-            } 
-
-            if (DateTime.Now.Minute == 1)
+                }
+                // Automatically reboot at 1:00AM
+                if(DateTime.Now.Hour == 1)
+                    Windows.System.ShutdownManager.BeginShutdown(Windows.System.ShutdownKind.Restart, TimeSpan.FromSeconds(1));		//Delay before restart after shutdown
+            }
+            
+            if((DateTime.Now.Minute == 5 || DateTime.Now.Minute == 35) && broadcasted == false)
             {
-                Speak("It's " + outsideTemp + " °C outside!");
+                Speak("Outside temperature: " + outsideTemp + " °C! Weather condition: " + weatherDescription);
+                broadcasted = true;
+            }
+
+            if (DateTime.Now.Minute == 1 || DateTime.Now.Minute == 6 || DateTime.Now.Minute == 36)
+            {
                 broadcasted = false;
             }                
         }
@@ -238,8 +248,8 @@ namespace SmartClock
 
             ContentDialog about = new ContentDialog()
             {
-                Title = "About SAP",
-                Content = "Smart Aquaponics System Prototype\n" + "Developed by Myron Richard Dennison\n" + "Version: " + assyVersion.ToString(),
+                Title = "About Project Leo",
+                Content = "The Smart Clock Prototype\n" + "Developed by Myron Richard Dennison\n" + "Version: " + assyVersion.ToString(),
                 CloseButtonText = "Close"
             };
 
@@ -327,7 +337,10 @@ namespace SmartClock
             {
                 RootObject myWeather = await OpenWeatherMapProxy.GetWeather(lat, lon, appId);
                 outsideTemp = ((int)myWeather.main.temp);
-                if(outsideTemp < 25)
+                weatherDescription = myWeather.weather[0].description;
+                string icon = String.Format("http://openweathermap.org/img/w/{0}.png", myWeather.weather[0].icon);
+
+                if (outsideTemp < 25)
                     this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Green);
                 else if(outsideTemp >= 25 && outsideTemp < 30)
                     this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Yellow);
@@ -335,11 +348,11 @@ namespace SmartClock
                     this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Orange);
                 else
                     this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Red);
+
                 this.systemStatusTb.Text = "Last Updated: " + DateTime.Now;
                 this.systemStatusIcon.Source = thumbsUp;
                 this.outsideTempLbl.Text = outsideTemp.ToString() + "°C";
-                this.weatherDescLbl.Text = myWeather.weather[0].description;
-                string icon = String.Format("http://openweathermap.org/img/w/{0}.png", myWeather.weather[0].icon);
+                this.weatherDescLbl.Text = weatherDescription;                
                 this.weatherIcon.Source = new BitmapImage(new Uri(icon, UriKind.Absolute));
             }
             catch //(Exception e)
@@ -376,7 +389,7 @@ namespace SmartClock
         /// <param name="e"></param>
         private void testWeatherTTS_Click(object sender, RoutedEventArgs e)
         {
-            Speak("It's " + outsideTemp + " °C outside!");
+            Speak("Outside temperature: " + outsideTemp + " °C! Weather condition: " + weatherDescription);
         }
     }
 }
