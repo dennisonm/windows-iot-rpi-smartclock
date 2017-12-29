@@ -1,25 +1,33 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Collections.Generic;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Media.SpeechSynthesis;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.Networking;
+using Windows.Networking.Connectivity;
+using System.Reflection;
+using Windows.UI.Popups;
+using Windows.UI;
 
 namespace SmartClock
 {
     public sealed partial class MainPage : Page
     {
         private DispatcherTimer DispatcherClockTimer = new DispatcherTimer();
-        private static bool broadcasted = false;
-        TimeZoneInfo remoteTimeZone;        
-            
-        BitmapImage AuFlag = new BitmapImage(new Uri("ms-appx:///Assets/AU-Flag.png"));
-        BitmapImage SgFlag = new BitmapImage(new Uri("ms-appx:///Assets/SG-Flag.png"));
-        BitmapImage PhFlag = new BitmapImage(new Uri("ms-appx:///Assets/PH-Flag.png"));        
+        private DispatcherTimer DispatcherWeatherTimer = new DispatcherTimer();
+        
+        private static bool broadcasted = false;        
+
+        string appId = "7c1ae704f9dfc739df4b5aa95de5cb53";
+        double lat = -33.812023;
+        double lon = 151.173050;
+        int outsideTemp;
+
+        BitmapImage thumbsUp = new BitmapImage(new Uri("ms-appx:///Assets/ThumbsUp-Icon.png"));
+        BitmapImage thumbsDown = new BitmapImage(new Uri("ms-appx:///Assets/ThumbsDown-Icon.png"));
 
         public MainPage()
         {
@@ -30,49 +38,13 @@ namespace SmartClock
             DispatcherClockTimer.Tick += DispatcherClockTimer_Tick;
             DispatcherClockTimer.Start();
 
-            // Update Location TextBlock                       
-            if (GetLocationByIPAddress() == null || GetLocationByIPAddress() == "")
-            {
-                this.SystemStatusTb.Text = "Unable to get location by IP Address!";
-                this.LocalLocationLbl.Text = "Singapore, Singapore";
-                Speak(
-                    "I am having problem getting your location." +
-                    " " +
-                    "Please check your network.");
-            }
-            else
-                this.LocalLocationLbl.Text = GetLocationByIPAddress();
-
-            if (GetLocationByIPAddress().Contains("Singapore"))
-            {
-                LocalFlag.Source = SgFlag;
-                remoteTimeZone = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
-                RemoteFlag.Source = AuFlag;
-                Greetings.Text = "Alla mak! Late orready lah!";                
-            }
-            else if (GetLocationByIPAddress().Contains("Australia"))
-            {
-                LocalFlag.Source = AuFlag;
-                remoteTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
-                RemoteFlag.Source = PhFlag;
-                Greetings.Text = "Ga day! Ow ya goin'";                
-            }
-            else if (GetLocationByIPAddress().Contains("Philippines"))
-            {
-                LocalFlag.Source = PhFlag;
-                remoteTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
-                RemoteFlag.Source = AuFlag;
-                Greetings.Text = "Mabuhay!";                
-            }
-            else //default
-            {
-                LocalFlag.Source = PhFlag;
-                remoteTimeZone = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
-                RemoteFlag.Source = AuFlag;
-            }
+            // Timer setup for the Weather
+            DispatcherWeatherTimer.Interval = TimeSpan.FromMinutes(5);
+            DispatcherWeatherTimer.Tick += DispatcherWeatherTimer_Tick;
+            DispatcherWeatherTimer.Start();
 
             // Initialize Status TextBlock
-            this.SystemStatusTb.Text = "";
+            getWeather(lat, lon, appId);
         }        
 
         /// <summary>
@@ -115,42 +87,77 @@ namespace SmartClock
         /// </summary>
         private void DispatcherClockTimer_Tick(object sender, object e)
         {
-            this.LocalTimeLbl.Text = DateTime.Now.ToString("h:mm");
-            this.LocalDateLbl.Text =DateTime.Now.ToString("dddd, MMMM dd, yyyy");
+            this.LocalTimeLbl.Text = DateTime.Now.ToString("hh:mm");
+            this.LocalDateLbl.Text =DateTime.Now.ToString("dddd, MMMM dd");
             this.LocalTimeSecLbl.Text = DateTime.Now.ToString("ss");
             this.LocalTimeAMPMLbl.Text = (DateTime.Now.Hour >= 12) ? "PM" : "AM";
 
-            if (DateTime.Now.Minute == 0 && broadcasted == false && DateTime.Now.Hour > 5)
+            if (DateTime.Now.Minute == 0 && broadcasted == false)
             {
-                if (DateTime.Now.Hour <= 12)
-                    Speak("It's " + DateTime.Now.Hour + " o'clock!");
-                else
-                    Speak("It's " + (DateTime.Now.Hour - 12) + " o'clock!");
-                broadcasted = true;
-            }
-            
-            DateTime remoteTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, remoteTimeZone);
-            this.RemoteTimeLbl.Text = Convert.ToString(remoteTime.ToString("h:mm"));
-            this.RemoteDateLbl.Text = Convert.ToString(remoteTime.ToString("ddd, MMM dd"));
+                if (DateTime.Now.Hour > 5)
+                {
+                    if (DateTime.Now.Hour <= 12)
+                        Speak("It's " + DateTime.Now.Hour + " o'clock!");
+                    else
+                        Speak("It's " + (DateTime.Now.Hour - 12) + " o'clock!");
+                    broadcasted = true;
+                }                
+            } 
 
             if (DateTime.Now.Minute == 1)
+            {
+                Speak("It's " + outsideTemp + " °C outside!");
                 broadcasted = false;
+            }                
+        }
+
+        /// <summary>
+        /// Get weather info from openweathermap.org
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DispatcherWeatherTimer_Tick(object sender, object e)
+        {
+            getWeather(lat, lon, appId);
         }
 
         /// <summary>
         /// Returns the private IP address of the device
         /// </summary>
-        public IPAddress GetIPAddress()
+        /// <param name="hostNameType"></param>
+        /// <returns></returns>
+        public static string GetLocalIp(HostNameType hostNameType = HostNameType.Ipv4)
         {
-            List<string> IpAddress = new List<string>();
-            var Hosts = Windows.Networking.Connectivity.NetworkInformation.GetHostNames().ToList();
-            foreach (var Host in Hosts)
+            var icp = NetworkInformation.GetInternetConnectionProfile();
+
+            if (icp?.NetworkAdapter == null) return null;
+            var hostname =
+                NetworkInformation.GetHostNames()
+                    .FirstOrDefault(
+                        hn =>
+                            hn.Type == hostNameType &&
+                            hn.IPInformation?.NetworkAdapter != null &&
+                            hn.IPInformation.NetworkAdapter.NetworkAdapterId == icp.NetworkAdapter.NetworkAdapterId);
+
+            // the ip address
+            return hostname?.CanonicalName;
+        }
+
+        /// <summary>
+        /// Displays the device's local IP address
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void GetMyLocalIP_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog myPrivateIPAdd = new ContentDialog()
             {
-                string IP = Host.DisplayName;
-                IpAddress.Add(IP);
-            }
-            IPAddress address = IPAddress.Parse(IpAddress.Last());
-            return address;
+                Title = "My Local IP Address",
+                Content = GetLocalIp().ToString(),
+                CloseButtonText = "Close"
+            };
+
+            await myPrivateIPAdd.ShowAsync();
         }
 
         /// <summary>
@@ -171,7 +178,7 @@ namespace SmartClock
             }
             catch(Exception)
             {
-                this.SystemStatusTb.Text = "Exception: Get Public Address Error!";
+                this.systemStatusTb.Text = "Exception: Get Public Address Error!";
             }            
             return ip;            
         }
@@ -193,7 +200,7 @@ namespace SmartClock
             }
             catch(Exception)
             {
-                this.SystemStatusTb.Text = "Exception: Get Location By IP Address Error!";
+                this.systemStatusTb.Text = "Exception: Get Location By IP Address Error!";
             }            
             return location.Trim();
         } 
@@ -218,6 +225,158 @@ namespace SmartClock
         {
             Speak("Shutting down.");
             Windows.System.ShutdownManager.BeginShutdown(Windows.System.ShutdownKind.Shutdown, TimeSpan.FromSeconds(1));		//Delay is not relevant to shutdown
+        }
+
+        /// <summary>
+        /// About the app
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        private async void About_Click(object sender, RoutedEventArgs e)
+        {
+            var assyVersion = typeof(App).GetTypeInfo().Assembly.GetName().Version;
+
+            ContentDialog about = new ContentDialog()
+            {
+                Title = "About SAP",
+                Content = "Smart Aquaponics System Prototype\n" + "Developed by Myron Richard Dennison\n" + "Version: " + assyVersion.ToString(),
+                CloseButtonText = "Close"
+            };
+
+            await about.ShowAsync();
+        }
+
+        /// <summary>
+        /// Launch Bluetooth Settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void LaunchBluetoothSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var uri = new Uri(@"ms-settings:bluetooth");
+
+            // Launch the URI
+            var success = await Windows.System.Launcher.LaunchUriAsync(uri);
+
+            if (success)
+            {
+                // Launched
+            }
+            else
+            {
+                //Launch failed
+                this.systemStatusTb.Text = "Launch failed!";
+            }
+        }
+
+        /// <summary>
+        /// Launch Date and Time Settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void LaunchDateTimeSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var uri = new Uri(@"ms-settings:dateandtime");
+
+            // Launch the URI
+            var success = await Windows.System.Launcher.LaunchUriAsync(uri);
+
+            if (success)
+            {
+                // Launched
+            }
+            else
+            {
+                // Launch failed
+                this.systemStatusTb.Text = "Launch failed!";
+            }
+        }
+
+        /// <summary>
+        /// Launch Wi-Fi Settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void LaunchWiFiSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var uri = new Uri(@"ms-settings:network-wifi");
+
+            // Launch the URI
+            var success = await Windows.System.Launcher.LaunchUriAsync(uri);
+
+            if (success)
+            {
+                // Launched
+            }
+            else
+            {
+                // Launch failed
+                this.systemStatusTb.Text = "Launch failed!";
+            }
+        }
+
+        /// <summary>
+        /// Poll weather info from openweathermap.org
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <param name="appId"></param>
+        private async void getWeather(double lat, double lon, string appId)
+        {
+            try
+            {
+                RootObject myWeather = await OpenWeatherMapProxy.GetWeather(lat, lon, appId);
+                outsideTemp = ((int)myWeather.main.temp);
+                if(outsideTemp < 25)
+                    this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Green);
+                else if(outsideTemp >= 25 && outsideTemp < 30)
+                    this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Yellow);
+                else if(outsideTemp >= 30 && outsideTemp < 35)
+                    this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Orange);
+                else
+                    this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Red);
+                this.systemStatusTb.Text = "Last Updated: " + DateTime.Now;
+                this.systemStatusIcon.Source = thumbsUp;
+                this.outsideTempLbl.Text = outsideTemp.ToString() + "°C";
+                this.weatherDescLbl.Text = myWeather.weather[0].description;
+                string icon = String.Format("http://openweathermap.org/img/w/{0}.png", myWeather.weather[0].icon);
+                this.weatherIcon.Source = new BitmapImage(new Uri(icon, UriKind.Absolute));
+            }
+            catch //(Exception e)
+            {
+                //this.systemStatusTb.Text = "Exception: OpenWeatherMapProxy Error!";
+                //var dialog = new MessageDialog(e.ToString());
+                //await dialog.ShowAsync();
+                this.systemStatusIcon.Source = thumbsDown;
+            }
+        }
+
+        /// <summary>
+        /// Test Text To Speech for Time
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void testTimeTTS_Click(object sender, RoutedEventArgs e)
+        {
+            string AMPM = (DateTime.Now.Hour >= 12) ? "PM" : "AM";
+            if (DateTime.Now.Hour <= 12 && DateTime.Now.Minute == 0)
+                Speak("It's " + DateTime.Now.Hour + AMPM);
+            else if(DateTime.Now.Hour <= 12 && DateTime.Now.Minute != 0)
+                Speak("It's " + DateTime.Now.Hour + DateTime.Now.Minute + AMPM);
+            else if(DateTime.Now.Hour > 12 && DateTime.Now.Minute == 0)
+                Speak("It's " + (DateTime.Now.Hour - 12) + AMPM); 
+            else
+                Speak("It's " + (DateTime.Now.Hour - 12) + DateTime.Now.Minute + AMPM);
+        }
+
+        /// <summary>
+        /// Test TTS for Weather
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void testWeatherTTS_Click(object sender, RoutedEventArgs e)
+        {
+            Speak("It's " + outsideTemp + " °C outside!");
         }
     }
 }

@@ -28,5 +28,7 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <DeviceCapability Name="location" />
+    <DeviceCapability Name="bluetooth" />
+    <DeviceCapability Name="microphone" />
   </Capabilities>
 </Package>

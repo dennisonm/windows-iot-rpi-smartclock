@@ -8,137 +8,177 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Width="800" Height="480">
         <Grid.RowDefinitions>
-            <RowDefinition Height="90"/>
-            <RowDefinition Height="330"/>
             <RowDefinition Height="60"/>
+            <RowDefinition Height="270"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0">            
-            <TextBlock x:Name="Greetings" 
-                Foreground="#EEEADCDC" 
-                FontSize="50"
-                Margin="0,10,0,10"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center" FontStyle="Italic">                        
-                Alla mak! Late orready lah! 
+        <Grid Grid.Row="0">
+            <TextBlock x:Name="GreetingLbl" 
+                    Margin="0,20,0,-40"
+                    Foreground="OrangeRed" 
+                    FontSize="70" 
+                    FontFamily="Fonts/Algerian Regular.ttf#Algerian"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+                <Run Text="G'day, Ow ya goin'?"/>
             </TextBlock>
         </Grid>
         <!-- Local Date -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="500"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="650"/>
+                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock x:Name="RemoteDateLbl" 
-                        Foreground="#EE35EA0D" 
-                        FontSize="20"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Center">
-                    Sat, Jan 27
-                </TextBlock>
-                <TextBlock x:Name="RemoteTimeLbl" 
-                        Grid.Column="1"
-                        Foreground="#EEEADCDC" 
-                        FontSize="50"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center">
-                    02:17
-                </TextBlock>                
-                <Image x:Name="RemoteFlag"                             
-                        Grid.Column="0"
-                        Margin="10,0,0,0"                              
-                        Width="75" 
-                        HorizontalAlignment="Center"     
-                        Source="Assets/PH-Flag.png"/>
-            </StackPanel>
-            <Grid Grid.Column="1" VerticalAlignment="Center">
-                <TextBlock x:Name="LocalDateLbl" 
-                        Foreground="#EE35EA0D" 
-                        FontSize="40" 
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Center">
-                    Thursday, April 07, 2005
-                </TextBlock>
+            <Grid Grid.Column="0" VerticalAlignment="Center" Height="300">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="419*"/>
+                    <ColumnDefinition Width="231*"/>
+                </Grid.ColumnDefinitions>
                 <TextBlock x:Name="LocalTimeLbl" 
-                        Grid.Column="1"
+                        Margin="0,70,0,0"
                         Foreground="#EEEADCDC" 
-                        FontSize="210"
+                        FontSize="245"
                         VerticalAlignment="Center"
-                        HorizontalAlignment="Center">
-                    01:27
-                </TextBlock>
-                <TextBlock x:Name="LocalLocationLbl" 
-                        Foreground="#EE35EA0D" 
-                        FontSize="40" 
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Center">
-                    Singapore, Singapore
+                        HorizontalAlignment="Center" 
+                        FontFamily="Fonts/Algerian Regular.ttf#Algerian" 
+                        Grid.ColumnSpan="2">
+                    <Run Text="01:27"/>
                 </TextBlock>
             </Grid>
-            <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Image x:Name="LocalFlag"                             
-                        Grid.Column="0"                                                    
-                        HorizontalAlignment="Center"                                                
-                        Width="75" 
-                        Source="Assets/SG-Flag.png"/>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock x:Name="LocalTimeAMPMLbl" 
-                        Grid.Column="2"
-                        Foreground="#EEEADCDC" 
-                        FontSize="50"
-                        VerticalAlignment="Center">
-                    AM
+                        HorizontalAlignment="Center"
+                        Margin="0,45,0,0"
+                        Foreground="Yellow" 
+                        FontSize="85" 
+                        FontFamily="Fonts/Algerian Regular.ttf#Algerian">
+                    <Run Text="AM"/>
                 </TextBlock>
                 <TextBlock x:Name="LocalTimeSecLbl" 
-                        Grid.Column="2"                        
-                        Foreground="#EEEADCDC" 
-                        FontSize="70">
-                    29
+                        HorizontalAlignment="Center"
+                        Margin="0,-25,0,0"
+                        Foreground="GreenYellow"                        
+                        FontSize="100" 
+                        FontFamily="Fonts/Algerian Regular.ttf#Algerian">
+                    <Run Text="29"/>
                 </TextBlock>
             </StackPanel>
         </Grid>
-
-        <!-- Footer -->
+        <Grid Grid.Row="2">
+            <TextBlock x:Name="LocalDateLbl" 
+                    Margin="0,0,0,0"
+                    Foreground="BlueViolet" 
+                    FontSize="45" 
+                    FontFamily="Fonts/Algerian Regular.ttf#Algerian"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+                <Run Text="Thursday, December 07"/>
+            </TextBlock>
+        </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="locationLbl" 
+                    Grid.Column="0"
+                    Margin="10,-5,0,0"
+                    Foreground="HotPink" 
+                    FontSize="40"                     
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left">
+                <Run Text="Lane Cove: "/>
+            </TextBlock>
+            <TextBlock x:Name="outsideTempLbl" 
+                    Grid.Column="1"
+                    Margin="10,10,0,0"
+                    Foreground="Green" 
+                    FontSize="40" 
+                    FontFamily="Fonts/Algerian Regular.ttf#Algerian"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left">
+                <Run Text="30°C"/>
+            </TextBlock>
+            <Image x:Name="weatherIcon"                             
+                        Grid.Column="2"
+                        Margin="10,8,0,0"                              
+                        Width="auto"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"     
+                        Source="Assets/10d.png"/>
+            <TextBlock x:Name="weatherDescLbl" 
+                    Grid.Column="3"
+                    Margin="10,-5,0,0"
+                    Foreground="NavajoWhite" 
+                    FontSize="40"                     
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="left">
+                <Run Text="scattered clouds"/>
+            </TextBlock>            
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Name="PowerBtn"                 
-                Grid.Column="0"
-                Margin="10,10,0,10" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Center"                     
-                Width="40" Height="40">
+            <Button x:Name="SettingsBtn" 
+                            Content="" 
+                            Grid.Column="0"
+                            Margin="10,0,10,0" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Center"                     
+                            Width="40" Height="40">
                 <Button.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="Restart" Click="Restart_Click"/>
-                        <MenuFlyoutItem Text="Shutdown" Click="Shutdown_Click"/>
+                        <MenuFlyoutItem Text="Bluetooth Settings" Click="LaunchBluetoothSettings_Click"/>
+                        <MenuFlyoutItem Text="Wi-Fi Settings" Click="LaunchWiFiSettings_Click"/>
+                        <MenuFlyoutItem Text="Date and Time Settings" Click="LaunchDateTimeSettings_Click"/>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutSubItem Text="Debug">
+                            <MenuFlyoutItem Text="My Private IP Address" Click="GetMyLocalIP_Click"/>
+                            <MenuFlyoutItem Text="What time is it?" Click="testTimeTTS_Click"/>
+                            <MenuFlyoutItem Text="What's the temperature outside?" Click="testWeatherTTS_Click"/>
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem Text="About SAP" Click="About_Click"/>
                     </MenuFlyout>
                 </Button.Flyout>
                 <Button.Background>
-                    <ImageBrush Stretch="Fill" ImageSource="Assets/powerbutton.png"/>
+                    <ImageBrush Stretch="Fill" ImageSource="Assets/Settings.png"/>
                 </Button.Background>
             </Button>
-            <TextBlock x:Name="SystemStatusTb" 
+            <TextBlock x:Name="systemStatusTb" 
                        Grid.Column="1" 
                        HorizontalAlignment="Left" 
                        VerticalAlignment="Center" 
                        FontSize="15" 
                        Foreground="#EEEADCDC" 
                        Margin="10,10,10,10">
-                Initializing...
+                <Run Text="Initializing..."/>
             </TextBlock>
-            <TextBlock Grid.Column="2" 
+            <Image x:Name="systemStatusIcon"                             
+                        Grid.Column="2"
+                        Margin="10,0,10,0"                              
+                        Width="20" 
+                        Height="20"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"     
+                        Source="Assets/ThumbsUp-Icon.png"/>
+            <TextBlock Grid.Column="3" 
                        HorizontalAlignment="Right" 
                        VerticalAlignment="Center" 
                        FontSize="15" 
                        Foreground="#EEEADCDC" 
                        Margin="10,10,10,10">
-                © 2017 Myron Richard Dennison
+                <Run Text="© 2017 Myron Richard Dennison"/>
             </TextBlock>
         </Grid>
     </Grid>
