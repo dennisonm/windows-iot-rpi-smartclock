@@ -109,13 +109,16 @@ namespace SmartClock
                     Windows.System.ShutdownManager.BeginShutdown(Windows.System.ShutdownKind.Restart, TimeSpan.FromSeconds(1));		//Delay before restart after shutdown
             }
             
-            if((DateTime.Now.Minute == 5 || DateTime.Now.Minute == 35) && broadcasted == false)
+            if(DateTime.Now.Minute == 5)
             {
-                Speak("Outside temperature: " + outsideTemp + " °C! Weather condition: " + weatherDescription);
-                broadcasted = true;
+                if (DateTime.Now.Hour > 5 && broadcasted == false)
+                {
+                    Speak("Weather conditions: " + outsideTemp + "°C with " + weatherDescription);
+                    broadcasted = true;
+                }
             }
 
-            if (DateTime.Now.Minute == 1 || DateTime.Now.Minute == 6 || DateTime.Now.Minute == 36)
+            if (DateTime.Now.Minute == 1 || DateTime.Now.Minute == 6)
             {
                 broadcasted = false;
             }                
@@ -389,7 +392,7 @@ namespace SmartClock
         /// <param name="e"></param>
         private void testWeatherTTS_Click(object sender, RoutedEventArgs e)
         {
-            Speak("Outside temperature: " + outsideTemp + " °C! Weather condition: " + weatherDescription);
+            Speak("Weather conditions: " + outsideTemp + "°C with " + weatherDescription);
         }
     }
 }

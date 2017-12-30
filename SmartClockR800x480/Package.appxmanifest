@@ -3,7 +3,7 @@
   <Identity Name="bd75eb2e-e875-460d-b9d3-9c56e43418a7" Publisher="CN=Myron Richard Dennison" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="bd75eb2e-e875-460d-b9d3-9c56e43418a7" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>SIAPS</DisplayName>
+    <DisplayName>Project Leo: The Smart Clock Prototype</DisplayName>
     <PublisherDisplayName>Myron Richard Dennison</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
