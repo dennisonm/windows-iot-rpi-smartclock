@@ -11,7 +11,7 @@ using Windows.UI.Popups;
 using Windows.Media.SpeechSynthesis;
 using Windows.Networking;
 using Windows.Networking.Connectivity;
-
+using Newtonsoft.Json;
 
 namespace SmartClock
 {
@@ -25,8 +25,9 @@ namespace SmartClock
         string appId = "7c1ae704f9dfc739df4b5aa95de5cb53";
         double lat = -33.812023;
         double lon = 151.173050;
-        int outsideTemp;
-        string weatherDescription;
+        int outsideTemp, minOutsideTemp, maxOutsideTemp, humidity;
+        string weatherDescription, city, country;
+        int sunrise, sunset;
 
         BitmapImage thumbsUp = new BitmapImage(new Uri("ms-appx:///Assets/ThumbsUp-Icon.png"));
         BitmapImage thumbsDown = new BitmapImage(new Uri("ms-appx:///Assets/ThumbsDown-Icon.png"));
@@ -339,7 +340,14 @@ namespace SmartClock
             try
             {
                 RootObject myWeather = await OpenWeatherMapProxy.GetWeather(lat, lon, appId);
+                city = myWeather.name;
+                country = myWeather.sys.country;
+                sunrise = myWeather.sys.sunrise;                
+                sunset = myWeather.sys.sunset;
                 outsideTemp = ((int)myWeather.main.temp);
+                humidity = ((int)myWeather.main.humidity);
+                minOutsideTemp = ((int)myWeather.main.temp_min);
+                maxOutsideTemp = ((int)myWeather.main.temp_max);
                 weatherDescription = myWeather.weather[0].description;
                 string icon = String.Format("http://openweathermap.org/img/w/{0}.png", myWeather.weather[0].icon);
 
@@ -353,8 +361,15 @@ namespace SmartClock
                     this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Red);
 
                 this.systemStatusTb.Text = "Last Updated: " + DateTime.Now;
+                //this.systemStatusTb.Text = "Time of data calculation: " + UnixTimeStampToDateTime(myWeather.dt).ToString("hh:mm:ss tt");
                 this.systemStatusIcon.Source = thumbsUp;
+                this.locationLbl.Text = city + ", " + country + ": ";
                 this.outsideTempLbl.Text = outsideTemp.ToString() + "°C";
+                this.outsideHumLbl.Text = humidity.ToString() + "%";
+                this.outsideMinTempLbl.Text = minOutsideTemp.ToString() + "°C";
+                this.outsideMinTempLbl.Text = maxOutsideTemp.ToString() + "°C";
+                this.sunriseLbl.Text = UnixTimeStampToDateTime(sunrise).ToString("hh:mm:ss tt");
+                this.sunsetLbl.Text = UnixTimeStampToDateTime(sunset).ToString("hh:mm:ss tt");
                 this.weatherDescLbl.Text = weatherDescription;                
                 this.weatherIcon.Source = new BitmapImage(new Uri(icon, UriKind.Absolute));
             }
@@ -378,11 +393,14 @@ namespace SmartClock
             if (DateTime.Now.Hour <= 12 && DateTime.Now.Minute == 0)
                 Speak("It's " + DateTime.Now.Hour + AMPM);
             else if(DateTime.Now.Hour <= 12 && DateTime.Now.Minute != 0)
-                Speak("It's " + DateTime.Now.Hour + DateTime.Now.Minute + AMPM);
-            else if(DateTime.Now.Hour > 12 && DateTime.Now.Minute == 0)
-                Speak("It's " + (DateTime.Now.Hour - 12) + AMPM); 
-            else
-                Speak("It's " + (DateTime.Now.Hour - 12) + DateTime.Now.Minute + AMPM);
+                Speak("It's " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + AMPM);
+            else if(DateTime.Now.Hour > 12)
+            {
+                if(DateTime.Now.Minute == 0)
+                    Speak("It's " + (DateTime.Now.Hour - 12) + AMPM);
+                else
+                    Speak("It's " + (DateTime.Now.Hour - 12) + ":" + DateTime.Now.Minute + AMPM);
+            }            
         }
 
         /// <summary>
@@ -393,6 +411,19 @@ namespace SmartClock
         private void testWeatherTTS_Click(object sender, RoutedEventArgs e)
         {
             Speak("Weather conditions: " + outsideTemp + "°C with " + weatherDescription);
+        }
+
+        /// <summary>
+        /// Convert unix timestamp to datetime format
+        /// </summary>
+        /// <param name="unixTimeStamp"></param>
+        /// <returns></returns>
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
         }
     }
 }
