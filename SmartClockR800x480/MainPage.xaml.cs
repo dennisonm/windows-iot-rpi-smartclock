@@ -345,7 +345,7 @@ namespace SmartClock
                 sunrise = myWeather.sys.sunrise;                
                 sunset = myWeather.sys.sunset;
                 outsideTemp = ((int)myWeather.main.temp);
-                humidity = ((int)myWeather.main.humidity);
+                humidity = myWeather.main.humidity;
                 minOutsideTemp = ((int)myWeather.main.temp_min);
                 maxOutsideTemp = ((int)myWeather.main.temp_max);
                 weatherDescription = myWeather.weather[0].description;
@@ -367,7 +367,7 @@ namespace SmartClock
                 this.outsideTempLbl.Text = outsideTemp.ToString() + "°C";
                 this.outsideHumLbl.Text = humidity.ToString() + "%";
                 this.outsideMinTempLbl.Text = minOutsideTemp.ToString() + "°C";
-                this.outsideMinTempLbl.Text = maxOutsideTemp.ToString() + "°C";
+                this.outsideMaxTempLbl.Text = maxOutsideTemp.ToString() + "°C";
                 this.sunriseLbl.Text = UnixTimeStampToDateTime(sunrise).ToString("hh:mm:ss tt");
                 this.sunsetLbl.Text = UnixTimeStampToDateTime(sunset).ToString("hh:mm:ss tt");
                 this.weatherDescLbl.Text = weatherDescription;                
