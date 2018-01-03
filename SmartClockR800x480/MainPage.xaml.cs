@@ -399,7 +399,7 @@ namespace SmartClock
                 if(DateTime.Now.Minute == 0)
                     Speak("It's " + (DateTime.Now.Hour - 12) + AMPM);
                 else
-                    Speak("It's " + (DateTime.Now.Hour - 12) + ":" + DateTime.Now.Minute + AMPM);
+                    Speak("It's " + (DateTime.Now.ToString("hh:mm")) + AMPM);
             }            
         }
 
