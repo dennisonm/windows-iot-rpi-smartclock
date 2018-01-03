@@ -363,7 +363,7 @@ namespace SmartClock
                 this.systemStatusTb.Text = "Last Updated: " + DateTime.Now;
                 //this.systemStatusTb.Text = "Time of data calculation: " + UnixTimeStampToDateTime(myWeather.dt).ToString("hh:mm:ss tt");
                 this.systemStatusIcon.Source = thumbsUp;
-                this.locationLbl.Text = city + ", " + country + ": ";
+                this.locationLbl.Text = city + ", " + country;
                 this.outsideTempLbl.Text = outsideTemp.ToString() + "°C";
                 this.outsideHumLbl.Text = humidity.ToString() + "%";
                 this.outsideMinTempLbl.Text = minOutsideTemp.ToString() + "°C";

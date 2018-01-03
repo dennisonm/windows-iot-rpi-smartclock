@@ -8,15 +8,15 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Width="800" Height="480">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="245"/>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <!-- Weather Conditions -->
-        <Grid Grid.Row="0" HorizontalAlignment="Center">
+        <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
@@ -26,13 +26,13 @@
             </Grid.ColumnDefinitions>
             <Image x:Name="weatherIcon"                             
                     Grid.Column="0"
-                    Margin="10,3,0,0"                              
+                    Margin="10,3,0,-10"                              
                     Height="auto"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left"     
                     Source="Assets/10d.png"/>
             <TextBlock Grid.Column="1"
-                    Margin="10,10,0,0"
+                    Margin="10,10,0,-10"
                     Foreground="OrangeRed" 
                     FontSize="30" 
                     FontFamily="Fonts/Algerian Regular.ttf#Algerian"
@@ -42,16 +42,16 @@
             </TextBlock>
             <TextBlock x:Name="outsideTempLbl" 
                     Grid.Column="2"
-                    Margin="10,10,0,0"
+                    Margin="10,10,0,-10"
                     Foreground="Yellow" 
                     FontSize="60" 
                     FontFamily="Fonts/Algerian Regular.ttf#Algerian"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left">
-                <Run Text="30°C"/>
+                <Run Text="28°C"/>
             </TextBlock>
             <TextBlock Grid.Column="3"
-                    Margin="10,10,0,0"
+                    Margin="10,10,0,-10"
                     Foreground="OrangeRed" 
                     FontSize="30" 
                     FontFamily="Fonts/Algerian Regular.ttf#Algerian"
@@ -61,13 +61,13 @@
             </TextBlock>
             <TextBlock x:Name="outsideHumLbl" 
                     Grid.Column="4"
-                    Margin="10,10,0,0"
+                    Margin="10,10,0,-10"
                     Foreground="Blue" 
                     FontSize="60" 
                     FontFamily="Fonts/Algerian Regular.ttf#Algerian"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left">
-                <Run Text="60%"/>
+                <Run Text="69%"/>
             </TextBlock>
         </Grid>
         
@@ -79,20 +79,18 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" VerticalAlignment="Center">
                 <TextBlock x:Name="LocalTimeLbl" 
-                        Margin="0,10,0,-40"
+                        Margin="0,0,0,-60"
                         Foreground="#EEEADCDC" 
-                        FontSize="245"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center" 
-                        FontFamily="Fonts/Algerian Regular.ttf#Algerian"> 
-                    <Run Text="01:27"/>
+                        FontSize="245" 
+                        FontFamily="Fonts/Algerian Regular.ttf#Algerian" VerticalAlignment="Center" HorizontalAlignment="Center"> 
+                    <Run Text="08:29"/>
                 </TextBlock>
             </Grid>
             <Grid Grid.Column="1" VerticalAlignment="Center">
                 <StackPanel>
                     <TextBlock x:Name="LocalTimeAMPMLbl" 
                             HorizontalAlignment="Center"
-                            Margin="0,3,0,0"
+                            Margin="0,30,0,0"
                             Foreground="Yellow" 
                             FontSize="85" 
                             FontFamily="Fonts/Algerian Regular.ttf#Algerian">
@@ -111,21 +109,21 @@
         </Grid>
         <Grid Grid.Row="2">
             <TextBlock x:Name="LocalDateLbl" 
-                    Margin="0,10,0,-10"
+                    Margin="0,10,0,0"
                     Foreground="BlueViolet" 
-                    FontSize="45" 
+                    FontSize="40" 
                     FontFamily="Fonts/Algerian Regular.ttf#Algerian"
-                    VerticalAlignment="Bottom"
+                    VerticalAlignment="Center"
                     HorizontalAlignment="Center">
-                <Run Text="Thursday, December 07"/>
+                <Run Text="Thursday, December 17"/>
             </TextBlock>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85"/>
-                <ColumnDefinition Width="165"/>
-                <ColumnDefinition Width="105"/>
-                <ColumnDefinition Width="95"/>
+                <ColumnDefinition Width="135"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="65"/>
                 <ColumnDefinition Width="85"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
@@ -134,13 +132,13 @@
                         Margin="10,0,0,0"
                         Foreground="GhostWhite" 
                         FontSize="20">                        
-                    <Run Text="Sunrise: "/>
+                    <Run Text="Sunrise"/>
                 </TextBlock>
                 <TextBlock  
                         Margin="10,0,0,0"
                         Foreground="GhostWhite"                        
                         FontSize="20">
-                    <Run Text="Sunset : "/>
+                    <Run Text="Sunset"/>
                 </TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">
@@ -162,13 +160,13 @@
                         Margin="0,0,0,0"
                         Foreground="GhostWhite" 
                         FontSize="20">                        
-                    <Run Text="Min Temp: "/>
+                    <Run Text="Min Temp"/>
                 </TextBlock>
                 <TextBlock  
                         Margin="0,0,0,0"
                         Foreground="GhostWhite"                        
                         FontSize="20">
-                    <Run Text="Max Temp: "/>
+                    <Run Text="Max Temp"/>
                 </TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left">
@@ -190,13 +188,13 @@
                         Margin="0,0,0,0"
                         Foreground="GhostWhite" 
                         FontSize="20">                     
-                    <Run Text="Skies     : "/>
+                    <Run Text="Skies"/>
                 </TextBlock>
                 <TextBlock                        
                         Margin="0,0,0,0"
                         Foreground="GhostWhite" 
                         FontSize="20">                    
-                    <Run Text="Location: "/>
+                    <Run Text="Location"/>
                 </TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left">
@@ -218,16 +216,16 @@
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>                
-                <ColumnDefinition />
+                <ColumnDefinition Width="65"/>
+                <ColumnDefinition Width="290"/>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="40"/>                
+                <ColumnDefinition Width="245"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="SettingsBtn" 
                             Content="" 
                             Grid.Column="0"
-                            Margin="10,0,10,0" 
+                            Margin="10,0,0,0" 
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Center"                     
                             Width="40" Height="40">
@@ -256,20 +254,20 @@
                        VerticalAlignment="Center" 
                        FontSize="15" 
                        Foreground="#EEEADCDC" 
-                       Margin="10,10,10,10">
+                       Margin="0,10,0,10">
                 <Run Text="Initializing..."/>
             </TextBlock>
             <TextBlock Grid.Column="2" 
-                       HorizontalAlignment="Right" 
+                       HorizontalAlignment="Left" 
                        VerticalAlignment="Center" 
                        FontSize="15" 
                        Foreground="#EEEADCDC" 
-                       Margin="10,10,10,10">
-                Status: 
+                       Margin="0,10,0,10">
+                Weather Update Status: 
             </TextBlock>
             <Image x:Name="systemStatusIcon"                             
                         Grid.Column="3"
-                        Margin="10,0,10,0"                              
+                        Margin="0,0,0,0"                              
                         Width="20" 
                         Height="20"
                         VerticalAlignment="Center"
@@ -280,7 +278,7 @@
                        VerticalAlignment="Center" 
                        FontSize="15" 
                        Foreground="#EEEADCDC" 
-                       Margin="10,10,10,10">
+                       Margin="0,10,10,10">
                 © 2018 Myron Richard Dennison
             </TextBlock>
         </Grid>
