@@ -79,7 +79,7 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" VerticalAlignment="Center">
                 <TextBlock x:Name="LocalTimeLbl" 
-                        Margin="0,0,0,-60"
+                        Margin="10,0,0,-60"
                         Foreground="#EEEADCDC" 
                         FontSize="245" 
                         FontFamily="Fonts/Algerian Regular.ttf#Algerian" VerticalAlignment="Center" HorizontalAlignment="Center"> 
