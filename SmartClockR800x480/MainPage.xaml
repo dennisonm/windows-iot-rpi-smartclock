@@ -199,7 +199,7 @@
                 </TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left">
-                <TextBlock x:Name="lastWeatherUpdateLbl"                    
+                <TextBlock x:Name="lastWeatherUpdateTb"                    
                         Margin="0,0,0,0"
                         Foreground="LightCoral" 
                         FontSize="20"                     

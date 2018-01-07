@@ -349,8 +349,8 @@ namespace SmartClock
                 else
                     this.outsideTempLbl.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Red);
 
-                this.systemStatusTb.Text = "Last Updated: " + DateTime.Now;
-                //this.systemStatusTb.Text = "Time of data calculation: " + UnixTimeStampToDateTime(myWeather.dt).ToString("hh:mm:ss tt");
+                this.lastWeatherUpdateTb.Text = DateTime.Now.ToString();
+                //this.lastWeatherUpdateTb.Text = "Time of data calculation: " + UnixTimeStampToDateTime(myWeather.dt).ToString("hh:mm:ss tt");
                 this.weatherUpdateStatusIcon.Source = thumbsUp;
                 this.locationLbl.Text = city + ", " + country;
                 this.outsideTempLbl.Text = outsideTemp.ToString() + "°C";
