@@ -48,25 +48,13 @@ namespace SmartClock
 
             // Initialize Status TextBlock
             getWeather(lat, lon, appId);
-        }        
+        }  
 
         /// <summary>
         /// Speech Synthesizer
         /// Text to Speech method (Speak)
         /// </summary>
         private async void Speak(string text)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {                
-                _Speak(text);                
-            });            
-        }
-
-        /// <summary>
-        /// Speech Synthesizer
-        /// Text to Speech method (Speak)
-        /// </summary>
-        private async void _Speak(string text)
         {
             // Initialize a new instance of the SpeechSynthesizer
             SpeechSynthesizer synth = new SpeechSynthesizer();
@@ -88,6 +76,8 @@ namespace SmartClock
         /// <summary>
         /// Updates the current time and date display
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DispatcherClockTimer_Tick(object sender, object e)
         {
             this.LocalTimeLbl.Text = DateTime.Now.ToString("hh:mm");
@@ -95,34 +85,33 @@ namespace SmartClock
             this.LocalTimeSecLbl.Text = DateTime.Now.ToString("ss");
             this.LocalTimeAMPMLbl.Text = (DateTime.Now.Hour >= 12) ? "PM" : "AM";
 
-            if (DateTime.Now.Minute == 0)
+            switch(DateTime.Now.Minute)
             {
-                if (DateTime.Now.Hour > 5 && broadcasted == false)
-                {
-                    if (DateTime.Now.Hour <= 12)
-                        Speak("It's " + DateTime.Now.Hour + " o'clock!");
-                    else
-                        Speak("It's " + (DateTime.Now.Hour - 12) + " o'clock!");
-                    broadcasted = true;
-                }
-                // Automatically reboot at 1:00AM
-                if(DateTime.Now.Hour == 1)
-                    Windows.System.ShutdownManager.BeginShutdown(Windows.System.ShutdownKind.Restart, TimeSpan.FromSeconds(1));		//Delay before restart after shutdown
-            }
-            
-            if(DateTime.Now.Minute == 5)
-            {
-                if (DateTime.Now.Hour > 5 && broadcasted == false)
-                {
-                    Speak("Weather conditions: " + outsideTemp + "°C with " + weatherDescription);
-                    broadcasted = true;
-                }
-            }
-
-            if (DateTime.Now.Minute == 1 || DateTime.Now.Minute == 6)
-            {
-                broadcasted = false;
-            }                
+                case 0:
+                    if (DateTime.Now.Hour > 5 && broadcasted == false)
+                    {
+                        if (DateTime.Now.Hour <= 12)
+                            Speak("It's " + DateTime.Now.Hour + " o'clock!");
+                        else
+                            Speak("It's " + (DateTime.Now.Hour - 12) + " o'clock!");
+                        broadcasted = true;
+                    }
+                    // Automatically reboot at 1:00AM
+                    if (DateTime.Now.Hour == 1)
+                        Windows.System.ShutdownManager.BeginShutdown(Windows.System.ShutdownKind.Restart, TimeSpan.FromSeconds(1));		//Delay before restart after shutdown
+                    break;
+                case 5:
+                    if (DateTime.Now.Hour > 5 && broadcasted == false)
+                    {
+                        Speak("Weather conditions: " + outsideTemp + "°C with " + weatherDescription);
+                        broadcasted = true;
+                    }
+                    break;
+                case 1:
+                case 6:
+                    broadcasted = false;
+                    break;
+            }            
         }
 
         /// <summary>
@@ -362,7 +351,7 @@ namespace SmartClock
 
                 this.systemStatusTb.Text = "Last Updated: " + DateTime.Now;
                 //this.systemStatusTb.Text = "Time of data calculation: " + UnixTimeStampToDateTime(myWeather.dt).ToString("hh:mm:ss tt");
-                this.systemStatusIcon.Source = thumbsUp;
+                this.weatherUpdateStatusIcon.Source = thumbsUp;
                 this.locationLbl.Text = city + ", " + country;
                 this.outsideTempLbl.Text = outsideTemp.ToString() + "°C";
                 this.outsideHumLbl.Text = humidity.ToString() + "%";
@@ -370,7 +359,7 @@ namespace SmartClock
                 this.outsideMaxTempLbl.Text = maxOutsideTemp.ToString() + "°C";
                 this.sunriseLbl.Text = UnixTimeStampToDateTime(sunrise).ToString("hh:mm:ss tt");
                 this.sunsetLbl.Text = UnixTimeStampToDateTime(sunset).ToString("hh:mm:ss tt");
-                this.weatherDescLbl.Text = weatherDescription;                
+                this.systemStatusTb.Text = "Skies: " + weatherDescription;                
                 this.weatherIcon.Source = new BitmapImage(new Uri(icon, UriKind.Absolute));
             }
             catch //(Exception e)
@@ -378,7 +367,7 @@ namespace SmartClock
                 //this.systemStatusTb.Text = "Exception: OpenWeatherMapProxy Error!";
                 //var dialog = new MessageDialog(e.ToString());
                 //await dialog.ShowAsync();
-                this.systemStatusIcon.Source = thumbsDown;
+                this.weatherUpdateStatusIcon.Source = thumbsDown;
             }
         }
 
@@ -414,16 +403,16 @@ namespace SmartClock
         }
 
         /// <summary>
-        /// Convert unix timestamp to datetime format
+        /// Convert unix timestamp to DateTime format
         /// </summary>
         /// <param name="unixTimeStamp"></param>
         /// <returns></returns>
-        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-            return dtDateTime;
+            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dt = dt.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dt;
         }
     }
 }

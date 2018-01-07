@@ -38,7 +38,7 @@
                     FontFamily="Fonts/Algerian Regular.ttf#Algerian"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left">
-                <Run Text="Temperature: "/>
+                <Run Text="Temperature"/>
             </TextBlock>
             <TextBlock x:Name="outsideTempLbl" 
                     Grid.Column="2"
@@ -57,7 +57,7 @@
                     FontFamily="Fonts/Algerian Regular.ttf#Algerian"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left">
-                <Run Text="HUMIDITY: "/>
+                <Run Text="HUMIDITY"/>
             </TextBlock>
             <TextBlock x:Name="outsideHumLbl" 
                     Grid.Column="4"
@@ -124,8 +124,9 @@
                 <ColumnDefinition Width="135"/>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="65"/>
-                <ColumnDefinition Width="85"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="125"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left">
                 <TextBlock  
@@ -188,7 +189,7 @@
                         Margin="0,0,0,0"
                         Foreground="GhostWhite" 
                         FontSize="20">                     
-                    <Run Text="Skies"/>
+                    <Run Text="Last Updated"/>
                 </TextBlock>
                 <TextBlock                        
                         Margin="0,0,0,0"
@@ -198,13 +199,13 @@
                 </TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left">
-                <TextBlock x:Name="weatherDescLbl"                    
+                <TextBlock x:Name="lastWeatherUpdateLbl"                    
                         Margin="0,0,0,0"
                         Foreground="LightCoral" 
                         FontSize="20"                     
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left">
-                    <Run Text="scattered clouds"/>
+                    <Run Text="1/27/2007 04:17:05 AM"/>
                 </TextBlock>
                 <TextBlock x:Name="locationLbl" 
                     Margin="0,0,0,0"
@@ -212,15 +213,20 @@
                     FontSize="20">                     
                 <Run Text="Lane Cove, AU"/>
                 </TextBlock>
-            </StackPanel>
+            </StackPanel>            
+            <Image x:Name="weatherUpdateStatusIcon"    
+                        Grid.Column="6"
+                        VerticalAlignment="Top"
+                        Margin="10,6,0,0"                              
+                        Width="20" 
+                        Height="20"
+                        Source="Assets/ThumbsUp-Icon.png"/>                
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="65"/>
-                <ColumnDefinition Width="290"/>
-                <ColumnDefinition Width="160"/>
-                <ColumnDefinition Width="40"/>                
-                <ColumnDefinition Width="245"/>
+                <ColumnDefinition Width="*"/>                
+                <ColumnDefinition Width="230"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="SettingsBtn" 
                             Content="" 
@@ -258,22 +264,6 @@
                 <Run Text="Initializing..."/>
             </TextBlock>
             <TextBlock Grid.Column="2" 
-                       HorizontalAlignment="Left" 
-                       VerticalAlignment="Center" 
-                       FontSize="15" 
-                       Foreground="#EEEADCDC" 
-                       Margin="0,10,0,10">
-                Weather Update Status: 
-            </TextBlock>
-            <Image x:Name="systemStatusIcon"                             
-                        Grid.Column="3"
-                        Margin="0,0,0,0"                              
-                        Width="20" 
-                        Height="20"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"     
-                        Source="Assets/ThumbsUp-Icon.png"/>
-            <TextBlock Grid.Column="4" 
                        HorizontalAlignment="Right" 
                        VerticalAlignment="Center" 
                        FontSize="15" 
